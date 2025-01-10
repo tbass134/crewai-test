@@ -1,0 +1,18 @@
+---
+lookup_local_businesses_task:
+  description: Search for local businesses in {location} that offer products related
+    to {product_keywords}. Assess their product offerings to determine suitability
+    for collaboration.
+  expected_output: A list of local businesses that align with the products I offer,
+    including their contact information and product details.
+  async_execution: false
+  agent: business_lookup_specialist
+create_email_proposal_task:
+  description: Compose an email proposal that suggests collaboration on a custom item
+    or selling my products at their location. Highlight the benefits for both parties.
+  expected_output: A well-crafted email proposal ready to be sent to the identified
+    local businesses, outlining collaboration opportunities.
+  async_execution: false
+  agent: email_proposal_writer
+  context:
+  - lookup_local_businesses_task

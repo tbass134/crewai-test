@@ -1,0 +1,20 @@
+[project]
+name = "local_business_lookup_and_proposal_generator"
+version = "0.1.0"
+description = "local_business_lookup_and_proposal_generator using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<=3.13"
+dependencies = [
+    "crewai[tools]>=0.86.0,<1.0.0"
+]
+
+[project.scripts]
+local_business_lookup_and_proposal_generator = "local_business_lookup_and_proposal_generator.main:run"
+run_crew = "local_business_lookup_and_proposal_generator.main:run"
+train = "local_business_lookup_and_proposal_generator.main:train"
+replay = "local_business_lookup_and_proposal_generator.main:replay"
+test = "local_business_lookup_and_proposal_generator.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
