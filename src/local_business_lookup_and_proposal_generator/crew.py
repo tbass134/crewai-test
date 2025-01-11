@@ -1,40 +1,50 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-# from crewai_tools import WebsiteSearchTool
-from .tools.custom_tool import MockEmailTool
-from crewai_tools import SerpApiGoogleSearchTool
+from crewai_tools import FileWriterTool, WebsiteSearchTool, SerpApiGoogleSearchTool, SerpApiGoogleShoppingTool
 
 @CrewBase
 class LocalBusinessLookupAndProposalGeneratorCrew():
     """LocalBusinessLookupAndProposalGenerator crew"""
 
     @agent
-    def business_lookup_specialist(self) -> Agent:
+    def product_lookup(self) -> Agent:
         return Agent(
-            config=self.agents_config['business_lookup_specialist'],
+            config=self.agents_config['product_lookup'],
+            tools=[WebsiteSearchTool()],
+        )
+
+    @agent
+    def business_lookup(self) -> Agent:
+        return Agent(
+            config=self.agents_config['business_lookup'],
             tools=[SerpApiGoogleSearchTool()],
         )
 
     @agent
-    def email_proposal_writer(self) -> Agent:
+    def csv_writer(self) -> Agent:
         return Agent(
-            config=self.agents_config['email_proposal_writer'],
-            tools=[MockEmailTool()],
+            config=self.agents_config['csv_writer'],
+            tools=[FileWriterTool(directory='output', filename='output.text')],
         )
 
+    @task
+    def lookup_products_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['lookup_products_task'],
+            tools=[SerpApiGoogleSearchTool()],            
+        )
 
     @task
     def lookup_local_businesses_task(self) -> Task:
         return Task(
             config=self.tasks_config['lookup_local_businesses_task'],
-            tools=[SerpApiGoogleSearchTool()],
+            
         )
-
     @task
     def create_email_proposal_task(self) -> Task:
         return Task(
             config=self.tasks_config['create_email_proposal_task'],
-            tools=[],
+            
         )
 
 

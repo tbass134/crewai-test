@@ -1,18 +1,32 @@
 ---
+lookup_products_task:
+  description: Analyze the products available on hungonwood.com to gather details
+    about your offerings. This includes identifying key features, pricing, and unique
+    selling points for each product.
+  expected_output: A comprehensive list of products from hungonwood.com, including
+    details such as product names, features, pricing, and unique selling points.
+  async_execution: false
+  agent: product_lookup
 lookup_local_businesses_task:
   description: Search for local businesses in {location} that offer products related
-    to {product_keywords}. Assess their product offerings to determine suitability
-    for collaboration.
-  expected_output: A list of local businesses that align with the products I offer,
-    including their contact information and product details.
+    to the analyzed offerings from hungonwood.com. Focus on identifying businesses
+    that would benefit from collaboration or product placement.
+  expected_output: A list of local businesses that align with your product offerings,
+    including their contact details and product categories they offer.
   async_execution: false
-  agent: business_lookup_specialist
+  agent: business_lookup
+  context:
+  - lookup_products_task
 create_email_proposal_task:
-  description: Compose an email proposal that suggests collaboration on a custom item
-    or selling my products at their location. Highlight the benefits for both parties.
-  expected_output: A well-crafted email proposal ready to be sent to the identified
-    local businesses, outlining collaboration opportunities.
+  description: Compose an email proposal that introduces your collaboration idea or
+    product placement, including a description of your business and specific
+    products you want to highlight. The email should be tailored to each local business
+    identified.
+  expected_output: A personalized email proposal for each local business, ready to
+    be sent, highlighting collaboration or product placement opportunities.
   async_execution: false
-  agent: email_proposal_writer
+  agent: csv_writer
   context:
   - lookup_local_businesses_task
+
+
