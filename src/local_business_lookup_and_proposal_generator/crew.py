@@ -1,6 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import FileWriterTool, WebsiteSearchTool, SerpApiGoogleSearchTool, SerpApiGoogleShoppingTool
+from crewai_tools import FileWriterTool, WebsiteSearchTool, SerpApiGoogleSearchTool, SerpApiGoogleShoppingTool, CSVSearchTool
+
 
 @CrewBase
 class LocalBusinessLookupAndProposalGeneratorCrew():
@@ -21,10 +22,16 @@ class LocalBusinessLookupAndProposalGeneratorCrew():
         )
 
     @agent
+    def create_email(self) -> Agent:
+        return Agent(
+            config=self.agents_config['create_email'],
+        )
+
+    @agent
     def csv_writer(self) -> Agent:
         return Agent(
             config=self.agents_config['csv_writer'],
-            tools=[FileWriterTool(directory='output', filename='output.text')],
+            tools=[CSVSearchTool()],
         )
 
     @task
@@ -45,6 +52,13 @@ class LocalBusinessLookupAndProposalGeneratorCrew():
         return Task(
             config=self.tasks_config['create_email_proposal_task'],
             
+        )
+
+    @task
+    def write_to_csv_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['write_to_csv_task'],
+            tools=[FileWriterTool()],
         )
 
 

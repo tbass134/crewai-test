@@ -9,10 +9,10 @@ lookup_products_task:
   agent: product_lookup
 lookup_local_businesses_task:
   description: Search for local businesses in {location} that offer products related
-    to the analyzed offerings from hungonwood.com. Focus on identifying businesses
-    that would benefit from collaboration or product placement.
+    to the analyzed offerings from hungonwood.com. Focus on identifying businesses in {location}
+    that would benefit from collaboration or product placement. Dont include big box stores or stores that only do woodworking
   expected_output: A list of local businesses that align with your product offerings,
-    including their contact details and product categories they offer.
+    including their contact details, email address and product categories they offer.
   async_execution: false
   agent: business_lookup
   context:
@@ -21,12 +21,27 @@ create_email_proposal_task:
   description: Compose an email proposal that introduces your collaboration idea or
     product placement, including a description of your business and specific
     products you want to highlight. The email should be tailored to each local business
-    identified.
+    identified.  The proposal should include links to products from hungonwood.com that would be a good fit for the local business
   expected_output: A personalized email proposal for each local business, ready to
-    be sent, highlighting collaboration or product placement opportunities.
+    be sent, highlighting collaboration or product placement opportunities, including links to products on hungonwood.com
+    In the closing of the email, use the following format
+    Tony Hung
+    Hung On Wood
+    Instagram.com/hung_on_wood
+  async_execution: false
+  agent: create_email
+  context:
+  - lookup_local_businesses_task
+  - lookup_products_task
+write_to_csv_task:
+  description: Write the composed email proposal content to a CSV file for tracking
+    purposes. Ensure that each entry includes the local business name, email address,
+    and the generated email for each local business.
+  expected_output: A CSV file containing the email proposal content for each identified
+    local business, formatted for easy tracking.
   async_execution: false
   agent: csv_writer
   context:
-  - lookup_local_businesses_task
+  - create_email_proposal_task
 
 

@@ -13,7 +13,6 @@ def run():
     """
     inputs = {
         'location': '12603',
-        'product_keywords': 'cutting boards'
     }
     LocalBusinessLookupAndProposalGeneratorCrew().crew().kickoff(inputs=inputs)
 

@@ -28,3 +28,29 @@ class MockEmailTool(BaseTool):
         print(f"Mock email sent to {recipient} with subject: {subject}")
         return True
    
+
+   class CSVWriterTool(BaseTool):
+     name: str = "CSV Writer"
+        description: str = (
+        "This tool writes structured data to a CSV file."
+    )
+    def _run(file_name: str, data: list) -> str:
+        """
+        Writes data to a CSV file.
+
+        Args:
+            file_name (str): The name of the CSV file to write to.
+            data (list): A list of rows, where each row is a list of values.
+
+        Returns:
+            str: A confirmation message or an error message.
+        """
+        try:
+            # Open the file in write mode
+            with open(file_name, mode="w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(data)  # Write rows to the file
+            return f"Data successfully written to {file_name}."
+        except Exception as e:
+            # Handle any errors during the file writing process
+            return f"Failed to write to {file_name}. Error: {str(e)}"
